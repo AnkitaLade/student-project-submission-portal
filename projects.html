@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Student Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body.gallery-bg {
+      background-color: #f0f0f0;
+      color: #000;
+      font-family: Arial, sans-serif;
+    }
+
+    .project-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: #123;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      color: #000;
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .project-details {
+      padding: 20px;
+      margin: 20px;
+      background-color: #111;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .project-details h2 {
+      margin-top: 0;
+    }
+
+    .back-button {
+      margin-top: 15px;
+      padding: 10px 15px;
+      background-color: #122;
+      color: #fff	;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .back-button:hover {
+      background-color: #345;
+    }
+  </style>
+</head>
+<body class="gallery-bg">
+  <header>
+    <nav>
+      <div class="logo">🎓 Student Portal</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="submit.html">Submit Project</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="gallery-section">
+    <h2>Submitted Projects</h2>
+    <div class="project-cards" id="projectCards"></div>
+  </section>
+
+  <script>
+    const projectCards = document.getElementById('projectCards');
+    const projects = JSON.parse(localStorage.getItem('projects')) || [];
+
+    function showAllProjects() {
+      // Clear page content
+      document.body.innerHTML = `
+        <header>
+          <nav>
+            <div class="logo">🎓 Student Portal</div>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="submit.html">Submit Project</a></li>
+              <li><a href="projects.html" class="active">Projects</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </header>
+        <section class="gallery-section">
+          <h2>Submitted Projects</h2>
+          <div class="project-cards" id="projectCards"></div>
+        </section>
+      `;
+      // Re-add the script
+      projects.forEach(proj => addCard(proj));
+    }
+
+    function addCard(proj) {
+      const container = document.getElementById('projectCards');
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${proj.title}</h3>
+        <p><strong>Student:</strong> ${proj.name}</p>
+      `;
+      card.addEventListener('click', () => showProjectDetails(proj));
+      container.appendChild(card);
+    }
+
+    function showProjectDetails(proj) {
+      // Replace entire body content with single project details
+      document.body.innerHTML = `
+        <header>
+          <nav>
+            <div class="logo">🎓 Student Portal</div>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="submit.html">Submit Project</a></li>
+              <li><a href="projects.html" class="active">Projects</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </header>
+        <section class="project-details">
+          <h2>${proj.title}</h2>
+          <p><strong>Student:</strong> ${proj.name}</p>
+          <p><strong>Roll No:</strong> ${proj.roll}</p>
+          <p><strong>Email:</strong> ${proj.email}</p>
+          <p><strong>Domain:</strong> ${proj.domain}</p>
+          <p><strong>Abstract:</strong> ${proj.abstract}</p>
+          <p><strong>Description:</strong> ${proj.description}</p>
+          <p><strong>File:</strong> ${proj.fileName}</p>
+          <button class="back-button">Back to All Projects</button>
+        </section>
+      `;
+      // Add back button functionality
+      document.querySelector('.back-button').addEventListener('click', showAllProjects);
+    }
+
+    // Initially load all projects
+    projects.forEach(proj => addCard(proj));
+  </script>
+</body>
+</html>
